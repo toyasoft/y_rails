@@ -17,6 +17,7 @@ services:
     image: rails:6.0.3
     volumes:
       - .:/myapp
+      - ~/.ssh:/root/.ssh
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
