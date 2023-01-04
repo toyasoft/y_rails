@@ -9,8 +9,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: current_user,
     }
     result = WorkspaceSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -20,6 +19,15 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def current_user
+    return unless request.headers[:userToken]
+    token = request.headers[:userToken].split(' ').last
+    json = JsonWebToken.decode(token)
+    User.find(json[:user_id])
+  rescue
+    nil
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)

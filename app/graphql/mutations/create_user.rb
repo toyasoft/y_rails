@@ -1,14 +1,26 @@
 module Mutations
   class CreateUser < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+    field :user, Types::UserType, null: false
+    field :errors, [String], null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+    argument :name, String, required: true
+    argument :email, String, required: true
+    argument :password, String, required: false
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+    def resolve(**args)
+
+      raise args.to_yaml
+      
+      user = User.create!(
+        name: args[:name],
+        email: args[:email],
+        password: args[:password]
+      )
+      {
+        user: user
+      }
+    rescue => e
+      raise GraphQL::ExecutionError, e
+    end
   end
 end

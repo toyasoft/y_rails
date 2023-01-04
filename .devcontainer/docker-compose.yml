@@ -22,6 +22,6 @@ services:
     #   - seccomp:unconfined
 
     # Overrides default command so things don't shut down after the process ends.
-    # command: /bin/sh -c "while sleep 1000; do :; done"
-    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0' ; while sleep 1000; do :; done"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0' ; while sleep 1000; do :; done"
  

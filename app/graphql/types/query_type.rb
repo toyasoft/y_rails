@@ -10,14 +10,14 @@ module Types
     end
 
     field :item, Types::ItemType, null: false do
-      argument :id, Int, required: false
+      argument :id, ID, required: true
     end
     def item(id:)
       Item.find(id)
     end
 
     field :user, Types::UserType, null: false do
-      argument :id, Int, required: false
+      argument :id, ID, required: true
     end
     def user(id:)
       User.find(id)

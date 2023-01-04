@@ -1,14 +1,21 @@
 module Mutations
   class CreateItem < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+    field :item, Types::ItemType, null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+    argument :name, String, required: true
+    argument :price, Int, required: true
+    argument :description, String, required: false
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+    def resolve(**args)
+      raise CustomError::Unauthorized if context[:current_user].nil?
+      item = Item.create!(
+        name: args[:name],
+        price: args[:price],
+        description: args[:description],
+      )
+      return {
+        item: item
+      }
+    end
   end
 end

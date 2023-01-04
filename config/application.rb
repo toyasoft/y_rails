@@ -12,7 +12,7 @@ require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
-# require "sprockets/railtie"
+require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -33,5 +33,12 @@ module Workspace
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.paths.add 'lib', eager_load: true
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.time_zone = 'Asia/Tokyo'
+    config.active_record.default_timezone = :local
+    config.active_record.time_zone_aware_types = [:datetime, :time]
+    config.i18n.default_locale = :ja
+    config.beginning_of_week = :sunday
   end
 end

@@ -1,14 +1,25 @@
 module Mutations
   class Signin < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+    field :user, Types::UserType, null: true
+    field :auth_token, String, null: true
+    field :errors, [String], null: false
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+    argument :email, String, required: true
+    argument :password, String, required: true
+    
+    def resolve(**args)
+      user = User.find_by(email: args[:email])
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+      raise User.all.to_yaml
+      raise GraphQL::ExecutionError.new("not authorized to create account for email:#{args[:email]}", extensions: { code: "UNAUTHORIZED"}) unless user && user.authenticate(args[:password])
+      {
+        user: user,
+        auth_token: JsonWebToken.encode({
+          user_id: user.id,
+          exp: (Time.zone.now + 24.hour).to_i
+        }),
+        errors: []
+      }
+    end
   end
 end
