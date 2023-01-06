@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe Mutations::CreateItem do
-  let!(:user) { create(:user) }
   let!(:query_string) {
     <<-GRAPHQL
       mutation($object: ItemAttributes!) {
@@ -12,7 +11,6 @@ describe Mutations::CreateItem do
         ){
           item {
             id
-            user{id}
             name
             price
           }
@@ -21,8 +19,8 @@ describe Mutations::CreateItem do
     GRAPHQL
   }
 
-  context 'nomally' do
-    it 'create an item and return object' do
+  context '通常時' do
+    it '商品オブジェクトを返す' do
       object = {
         userId: user.id,
         name: "商品1",
@@ -37,6 +35,36 @@ describe Mutations::CreateItem do
         name: '商品1',
         price: 1000
       )
+    end
+  end
+  context '未ログインの場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品名が空の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品名が256文字以上の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントが空の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントが数値でない場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントが11桁以上の場合' do
+    it 'エラーを返す' do
+      
     end
   end
 

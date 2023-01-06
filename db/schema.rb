@@ -14,7 +14,8 @@ ActiveRecord::Schema.define(version: 2022_12_30_113134) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.integer "price"
+    t.integer "point"
+    t.boolean "del"
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -23,25 +24,27 @@ ActiveRecord::Schema.define(version: 2022_12_30_113134) do
 
   create_table "orders", force: :cascade do |t|
     t.string "name"
-    t.integer "price"
-    t.integer "buyer_id", null: false
-    t.integer "seller_id", null: false
+    t.integer "point"
+    t.string "buyer"
+    t.string "seller"
+    t.integer "user_id", null: false
+    t.integer "item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["buyer_id"], name: "index_orders_on_buyer_id"
-    t.index ["seller_id"], name: "index_orders_on_seller_id"
+    t.index ["item_id"], name: "index_orders_on_item_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.integer "point"
     t.string "name"
-    t.string "string"
+    t.string "password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "items", "users"
-  add_foreign_key "orders", "users", column: "buyer_id"
-  add_foreign_key "orders", "users", column: "seller_id"
+  add_foreign_key "orders", "items"
+  add_foreign_key "orders", "users"
 end

@@ -10,11 +10,11 @@ describe Types::QueryType do
   let!(:account_in_the_same_company) { create(:item, group: group_in_the_same_company) }
   let!(:account_in_the_different_company) { create(:item, group: group_in_different_company) }
 
-  describe 'item' do
+  describe 'items' do
     let!(:query_string) {
       <<-GRAPHQL
-        query($id: ID!) {
-          item(id: $id) {
+        query {
+          items {
             id
             name
             price
@@ -33,30 +33,7 @@ describe Types::QueryType do
         )
       end
     end
-    context '商品IDが空の場合' do
-      it 'エラーを返す' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
-        expect(result.dig('data', 'item')).to be_nil
-      end
-    end
-    context '商品IDが無効の場合' do
-      it 'エラーを返す' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
-        expect(result.dig('data', 'item')).to be_nil
-      end
-    end
-    context '商品が存在しない場合' do
-      it 'エラーを返す' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
-        expect(result.dig('data', 'item')).to be_nil
-      end
-    end
-    context '商品が削除済みの場合' do
-      it 'エラーを返す' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
-        expect(result.dig('data', 'item')).to be_nil
-      end
-    end
+
 
   end
 end

@@ -2,9 +2,11 @@ class CreateOrders < ActiveRecord::Migration[6.0]
   def change
     create_table :orders do |t|
       t.string :name
-      t.integer :price
-      t.references :buyer, null: false, foreign_key: {to_table: :users}
-      t.references :seller, null: false, foreign_key: {to_table: :users}
+      t.integer :point
+      t.string :buyer
+      t.string :seller
+      t.references :user, null: false, foreign_key: true
+      t.references :item, null: false, foreign_key: true
 
       t.timestamps
     end

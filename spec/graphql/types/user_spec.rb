@@ -18,13 +18,18 @@ describe Types::QueryType do
             id
             name
             price
+            items {
+              id
+              name
+              point
+            }
           }
         }
       GRAPHQL
     }
 
-    context 'nomally' do
-      it 'return an user' do
+    context '通常時' do
+      it 'ユーザーオブジェクトを返す' do
         result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: user.id })
         expect(result.dig('data', 'user')).to eq(
           'id' => user.id.to_s,
@@ -33,8 +38,14 @@ describe Types::QueryType do
         )
       end
     end
-    context 'if not specify id' do
-      it 'return nothing' do
+    context 'ユーザーIDが無効の場合' do
+      it 'エラーを返す' do
+        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
+        expect(result.dig('data', 'user')).to be_nil
+      end
+    end
+    context 'ユーザーが存在しない場合' do
+      it 'エラーを返す' do
         result = WorkspaceSchema.execute(query_string, context: { current_user: user })
         expect(result.dig('data', 'user')).to be_nil
       end

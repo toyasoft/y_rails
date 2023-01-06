@@ -3,7 +3,6 @@ module Mutations
     field :user, Types::UserType, null: false
     field :errors, [String], null: false
 
-    argument :name, String, required: true
     argument :email, String, required: true
     argument :password, String, required: false
 
@@ -12,7 +11,6 @@ module Mutations
       raise args.to_yaml
       
       user = User.create!(
-        name: args[:name],
         email: args[:email],
         password: args[:password]
       )

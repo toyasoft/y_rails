@@ -1,19 +1,24 @@
 module Types
   class QueryType < Types::BaseObject
-    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
     field :items, [Types::ItemType], null: false
     def items
-      Item.all
+      Item.where(del: 0)
     end
 
     field :item, Types::ItemType, null: false do
       argument :id, ID, required: true
     end
     def item(id:)
-      Item.find(id)
+      Item.where(del: 0).find_by(id: args[:id])
+    end
+
+    field :current_user, Types::UserType, null: false
+    def current_user
+      current_user
     end
 
     field :user, Types::UserType, null: false do

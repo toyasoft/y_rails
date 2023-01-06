@@ -5,7 +5,6 @@ module Types
     field :id, ID, null: false
     field :email, String
     field :point, Integer
-    field :name, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

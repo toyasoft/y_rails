@@ -1,15 +1,19 @@
 require 'rails_helper'
 
-describe Mutations::DeleteItem do
-  let(:query_string) {
+describe Mutations::Signin do
+  let!(:user) { create(:user) }
+  let!(:query_string) {
     <<-GRAPHQL
-      mutation($id: ID!) {
-        deleteItem(
+      mutation($object: UserAttributes!) {
+        signin(
           input: {
-            id: $id
+            object: $object
           }
         ){
-          deletedItemId
+          user {
+            email
+          }
+          userToken
         }
       }
     GRAPHQL
@@ -27,25 +31,26 @@ describe Mutations::DeleteItem do
       expect(result.dig('data', 'deleteItem', 'item', 'id')).to eq item.id.to_s
     end
   end
-  context '未ログインの場合' do
+  context 'ユーザーが存在しない場合' do
     it 'エラーを返す' do
       
     end
   end
-  context '商品IDが空の場合' do
+  context 'パスワードが間違えている場合' do
     it 'エラーを返す' do
       
     end
   end
-  context '商品IDが無効の場合' do
+  context 'メールアドレスが空の場合' do
     it 'エラーを返す' do
       
     end
   end
-  context '商品が削除済みの場合' do
+  context 'パスワードが空の場合' do
     it 'エラーを返す' do
       
     end
   end
+
 
 end

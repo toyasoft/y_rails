@@ -12,7 +12,6 @@ describe Mutations::UpdateItem do
         ){
           item {
             id
-            user{id}
             name
             price
           }
@@ -21,39 +20,68 @@ describe Mutations::UpdateItem do
     GRAPHQL
   }
 
-  context 'nomally' do
-    it 'update an item and return object' do
-      object = {
-        id: item.id,
-        userId: user.id,
-        name: "updated001-#{item.id}-#{item.name}",
-        price: item.price
-      }
+  context '通常時' do
+    let(:item) { create(:item, group: group) }
 
-      result = WebSchema.execute(query_string, context: { current_user: user }, variables: { object: object })
-      expect(result.dig('data', 'updateItem', 'item')).not_to be_blank
-      expect(Item.count).to eq 1
-      expect(Item.find_by(id: item.id)).to have_attributes(
-        id: item.id,
-        user_id: user.id,
-        name: "updated001-#{item.id}-#{item.name}",
-        price: item.price
-      )
+    it 'delete an item' do
+      result = WebSchema.execute(query_string, context: { current_user: user }, variables: { id: item.id })
+      item.reload
+
+      expect(item.discarded?).to eq true
+      expect(Item.kept.ids).not_to include item.id
+      expect(result.dig('data', 'deleteItem', 'item', 'id')).to eq item.id.to_s
     end
   end
-  context 'if there is no update target record' do
-    it 'raise execution error' do
-      object = {
-        id: 0,
-        userId: user.id,
-        name: "update Item",
-        price: 1000
-      }
-
-      result = WebSchema.execute(query_string, context: { current_user: user }, variables: { object: object })
-      expect(result.dig('data', 'updateItem')).to be_nil
-      expect(result.dig('errors', 0, 'message')).to eq("item not found with id:0")
+  context '未ログインの場合' do
+    it 'エラーを返す' do
+      
     end
   end
+  context '商品IDが空の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品IDが無効の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品が存在しない場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品が削除済みの場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品名が空の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '商品名が256文字以上の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントか空の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントが数値でない場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'ポイントが11桁以上の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+
 
 end

@@ -14,16 +14,19 @@ describe Types::QueryType do
     let!(:query_string) {
       <<-GRAPHQL
         query($id: ID!) {
-          order(id: $id) {
+          orders {
             id
             name
-            price
+            point
+            buyer
+            seller
+            createdAt
           }
         }
       GRAPHQL
     }
 
-    context 'nomally' do
+    context '通常時' do
       it 'return an order' do
         result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: order.id })
         expect(result.dig('data', 'order')).to eq(
@@ -33,12 +36,7 @@ describe Types::QueryType do
         )
       end
     end
-    context 'if not specify id' do
-      it 'return nothing' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user })
-        expect(result.dig('data', 'order')).to be_nil
-      end
-    end
+
 
   end
 end

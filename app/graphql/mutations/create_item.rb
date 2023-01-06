@@ -3,15 +3,13 @@ module Mutations
     field :item, Types::ItemType, null: false
 
     argument :name, String, required: true
-    argument :price, Int, required: true
-    argument :description, String, required: false
+    argument :point, Int, required: true
 
     def resolve(**args)
       raise CustomError::Unauthorized if context[:current_user].nil?
       item = Item.create!(
         name: args[:name],
-        price: args[:price],
-        description: args[:description],
+        point: args[:point],
       )
       return {
         item: item

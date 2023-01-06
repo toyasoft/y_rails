@@ -4,21 +4,17 @@ module Mutations
 
     argument :id, ID, required: true
     argument :name, String, required: true
-    argument :price, Integer, required: true
+    argument :point, Integer, required: true
 
     def resolve(**args)
       raise CustomError::Unauthorized if context[:current_admin].nil? && context[:current_user].nil?
-      website = Website.find(args[:id])
-      website.update!(
-        name: args[:name].nil? ? website.name : args[:name],
-        title: args[:title].nil? ? website.title : args[:title],
-        domain: args[:domain].nil? ? website.domain : args[:domain],
-        hostname: args[:hostname].nil? ? website.hostname : args[:hostname],
-        user_id: args[:user_id].nil? ? website.user_id : args[:user_id],
-        password: args[:password].nil? ? '' : args[:password],
+      item = Item.where(id: args[:id], del: 0).first
+      item.update!(
+        name: args[:name].nil? ? item.name : args[:name],
+        point: args[:point].nil? ? website.point : args[:point],
       )
       return {
-        website: website,
+        item: item,
         errors: []
       }
     end

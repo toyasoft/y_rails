@@ -93,6 +93,7 @@ GEM
     mini_portile2 (2.8.1)
     minitest (5.16.3)
     msgpack (1.6.0)
+    mysql2 (0.5.4)
     net-imap (0.3.4)
       date
       net-protocol
@@ -195,6 +196,7 @@ DEPENDENCIES
   graphql
   jwt
   listen (~> 3.2)
+  mysql2
   puma (~> 4.1)
   rack-cors
   rails (~> 6.0.6)
