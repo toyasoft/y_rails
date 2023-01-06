@@ -12,34 +12,33 @@
 
 ActiveRecord::Schema.define(version: 2022_12_30_113134) do
 
-  create_table "items", force: :cascade do |t|
-    t.string "name"
-    t.integer "point"
-    t.boolean "del"
-    t.integer "user_id", null: false
+  create_table "items", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "point", default: 0, null: false
+    t.boolean "del", default: false, null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.string "name"
-    t.integer "point"
-    t.string "buyer"
-    t.string "seller"
-    t.integer "user_id", null: false
-    t.integer "item_id", null: false
+  create_table "orders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "point", default: 0, null: false
+    t.string "buyer", null: false
+    t.string "seller", null: false
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["item_id"], name: "index_orders_on_item_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "email"
-    t.integer "point"
-    t.string "name"
-    t.string "password"
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "email", null: false
+    t.integer "point", default: 0, null: false
+    t.string "password", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

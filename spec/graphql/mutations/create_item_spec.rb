@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Mutations::CreateItem do
+  let!(:user) { create(:user) }
   let!(:query_string) {
     <<-GRAPHQL
       mutation($object: ItemAttributes!) {

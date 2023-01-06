@@ -10,12 +10,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
   password: root
+  host: mysql
 
 development:
   <<: *default
   database: demo
-  port: 3308
-  host: y_rails-mysql-1
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,7 +22,5 @@ development:
 test:
   <<: *default
   database: test
-  port: 3308
-  host: y_rails-mysql-1
 
 

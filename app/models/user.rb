@@ -2,8 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }, length: { maximum: 255 }
-  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { case_sensitive: false }
-  validates :password, length: { in: 12..20 }, format: { with: /(?=.*\d+.*)(?=.*[a-zA-Z]+.*).*[!@#%_,&~\\\^\?\|\/\*\.\-\+\$\(\)]+.*/, message: "半角英数字に記号を含めた文字にしてください" }, allow_blank: true
+  validates :password, length: { in: 8.20 }, format: { with: /(?=.*\d+.*)(?=.*[a-zA-Z]+.*).*[!@#%_,&~\\\^\?\|\/\*\.\-\+\$\(\)]+.*/, message: "半角英数字に記号を含めた文字にしてください" }, allow_blank: true
   validates :password, presence: true, on: :create
 
   attr_accessor :activation_token, :reset_token

@@ -1,4 +1,4 @@
 class Order < ApplicationRecord
-  belongs_to :buyer
-  belongs_to :seller
+  validates :name, presence: true, length: { maximum: 255 }
+  
 end
