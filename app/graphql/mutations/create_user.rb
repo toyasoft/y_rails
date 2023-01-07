@@ -8,7 +8,6 @@ module Mutations
 
     def resolve(**args)
 
-      raise args.to_yaml
       
       user = User.create!(
         email: args[:email],

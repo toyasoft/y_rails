@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe Mutations::CreateUser do
-  let!(:user) { create(:user) }
   let!(:query_string) {
     <<-GRAPHQL
-      mutation($object: UserAttributes!) {
+      mutation($email: String! $password: String!) {
         createUser(
           input: {
-            object: $object
+            email: $email,
+            password: $password
           }
         ){
           user {
@@ -21,47 +21,78 @@ describe Mutations::CreateUser do
   context '通常時' do
     it 'ユーザーオブジェクトを返す' do
       object = {
-        name: "ユーザー1",
-        email: "info@toyasoft.com"
+        email: "test@toyasoft.com",
+        password: "1234asdfqWer!"
       }
 
-      result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { object: object })
-      expect(result.dig('data', 'createUser', 'item')).not_to be_blank
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).not_to be_blank
       expect(User.count).to eq 1
       expect(User.first).to have_attributes(
-        name: 'ユーザー1',
-        email: "info@toyasoft.com"
+        email: "test@toyasoft.com"
       )
     end
   end
   context 'メールアドレスが空の場合' do
     it 'エラーを返す' do
-      
+      object = {
+        email: nil,
+        password: "1234asdfqWer!"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Variable $email of type String! was provided invalid value')
     end
   end
   context 'パスワードが空の場合' do
     it 'エラーを返す' do
-      
-    end
-  end
-  context 'メールアドレスが有効でない場合' do
-    it 'エラーを返す' do
-      
+      object = {
+        email: "test@toyasoft.com",
+        password: nil
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Variable $password of type String! was provided invalid value')
     end
   end
   context 'メールアドレスが正しくない場合' do
     it 'エラーを返す' do
-      
+      object = {
+        email: "example",
+        password: "1234asdfqWer!"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Email is invalid')
     end
   end
   context 'メールアドレスが256文字以上の場合' do
     it 'エラーを返す' do
-      
+      object = {
+        email: "test@" + "a" * 256 + ".com",
+        password: "1234asdfqWer!"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Email is too long (maximum is 255 characters)')
     end
   end
   context 'メールアドレスが重複している場合' do
+    let!(:user) { create(:user, email: "test@toyasoft.com") }
     it 'エラーを返す' do
       
+      object = {
+        email: "test@toyasoft.com",
+        password: "1234asdfqWer!"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Email has already been taken')
     end
   end
 
