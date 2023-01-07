@@ -21,10 +21,10 @@ class GraphqlController < ApplicationController
   private
 
   def current_user
-    return unless request.headers[:userToken]
-    token = request.headers[:userToken].split(' ').last
+    return unless request.headers[:authorization]
+    token = request.headers[:authorization].split(' ').last
     json = JsonWebToken.decode(token)
-    User.find(json[:user_id])
+    User.find(json[:id])
   rescue
     nil
   end

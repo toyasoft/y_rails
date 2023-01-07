@@ -11,8 +11,10 @@ module Mutations
       
       user = User.create!(
         email: args[:email],
-        password: args[:password]
+        password: args[:password],
+        point: 10000
       )
+      
       {
         user: user
       }

@@ -105,6 +105,7 @@ type Item {
   name: String!
   point: Int!
   updatedAt: ISO8601DateTime!
+  userId: ID!
 }
 
 type Mutation {
@@ -216,6 +217,7 @@ type User {
   createdAt: ISO8601DateTime!
   email: String
   id: ID!
+  items: [Item!]!
   point: Int
   updatedAt: ISO8601DateTime!
 }

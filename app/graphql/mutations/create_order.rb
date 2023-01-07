@@ -20,18 +20,18 @@ module Mutations
         seller: item.user.email,
         name: item.name
       )
+      buyer = User.find(context[:current_user].id)
+      buyer.update(
+        point: buyer.point - item.point
+      )
+      seller = User.find(item.user.id)
+      seller.update(
+        point: seller.point + item.point
+      )
       {
         order: order,
-        buyer: {
-          id: context[:current_user].id,
-          email: context[:current_user].email,
-          point: context[:current_user].point
-        },
-        seller: {
-          id: item.user.id,
-          email: item.user.email,
-          point: item.user.point
-        }
+        buyer: buyer,
+        seller: seller
       }
     rescue => e
       raise GraphQL::ExecutionError, e

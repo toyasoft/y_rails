@@ -13,7 +13,9 @@ module Mutations
       {
         user: user,
         user_token: JsonWebToken.encode({
-          user_id: user.id,
+          id: user.id,
+          email: user.email,
+          type: "user",
           exp: (Time.zone.now + 24.hour).to_i
         })
       }
