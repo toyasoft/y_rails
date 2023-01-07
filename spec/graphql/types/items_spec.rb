@@ -1,14 +1,8 @@
 require 'rails_helper'
 
 describe Types::QueryType do
-  let!(:group) { create(:group) }
-  let!(:group_in_the_same_company) { create(:group, company: group.company) }
-  let!(:group_in_different_company) { create(:group) }
-  let!(:user) { create(:user, group: group) }
-  let!(:item) { create(:item, group: group) }
-  let!(:account_in_the_same_group) { create(:item, group: group) }
-  let!(:account_in_the_same_company) { create(:item, group: group_in_the_same_company) }
-  let!(:account_in_the_different_company) { create(:item, group: group_in_different_company) }
+  let!(:item) { create(:item) }
+  let!(:deleted_item) { create(:item, del: 1) }
 
   describe 'items' do
     let!(:query_string) {
@@ -17,19 +11,28 @@ describe Types::QueryType do
           items {
             id
             name
-            price
+            point
           }
         }
       GRAPHQL
     }
 
     context '通常時' do
-      it '商品オブジェクトを返す' do
-        result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: item.id })
-        expect(result.dig('data', 'item')).to eq(
-          'id' => item.id.to_s,
-          'name' => item.name,
-          'price' => item.price
+      it '削除フラグの立っていない商品オブジェクトを返す' do
+        result = WorkspaceSchema.execute(query_string)
+        expect(result.dig('data', 'items')).to contain_exactly(
+          {
+            'id' => item.id.to_s,
+            'name' => item.name,
+            'point' => item.point
+          }
+        )
+        expect(result.dig('data', 'items')).not_to contain_exactly(
+          {
+            'id' => deleted_item.id.to_s,
+            'name' => deleted_item.name,
+            'point' => deleted_item.point
+          }
         )
       end
     end

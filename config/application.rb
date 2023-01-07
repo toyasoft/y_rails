@@ -38,7 +38,7 @@ module Workspace
     config.time_zone = 'Asia/Tokyo'
     config.active_record.default_timezone = :local
     config.active_record.time_zone_aware_types = [:datetime, :time]
-    config.i18n.default_locale = :ja
+    # config.i18n.default_locale = :ja
     config.beginning_of_week = :sunday
   end
 end

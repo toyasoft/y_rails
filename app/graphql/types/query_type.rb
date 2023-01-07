@@ -13,12 +13,16 @@ module Types
       argument :id, ID, required: true
     end
     def item(id:)
-      Item.where(del: 0).find_by(id: args[:id])
+      raise GraphQL::ExecutionError, "商品IDが無効です" unless id =~ /^[0-9]+$/
+      Item.where(del: 0).find_by!(id: id)
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
 
     field :current_user, Types::UserType, null: false
     def current_user
-      current_user
+      raise GraphQL::ExecutionError, "認証エラーです" unless context[:current_user]
+      context[:current_user]
     end
 
     field :user, Types::UserType, null: false do

@@ -6,14 +6,19 @@ module Mutations
     argument :point, Int, required: true
 
     def resolve(**args)
-      raise CustomError::Unauthorized if context[:current_user].nil?
+
+      raise GraphQL::ExecutionError, "認証エラーです" if context[:current_user].nil?
       item = Item.create!(
         name: args[:name],
         point: args[:point],
+        user_id: context[:current_user].id
       )
+
       return {
         item: item
       }
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
   end
 end

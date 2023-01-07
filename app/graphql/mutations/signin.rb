@@ -20,6 +20,8 @@ module Mutations
         }),
         errors: []
       }
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
   end
 end

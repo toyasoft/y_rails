@@ -1,14 +1,7 @@
 require 'rails_helper'
 
 describe Types::QueryType do
-  let!(:group) { create(:group) }
-  let!(:group_in_the_same_company) { create(:group, company: group.company) }
-  let!(:group_in_different_company) { create(:group) }
-  let!(:user) { create(:user, group: group) }
-  let!(:user) { create(:user, group: group) }
-  let!(:account_in_the_same_group) { create(:user, group: group) }
-  let!(:account_in_the_same_company) { create(:user, group: group_in_the_same_company) }
-  let!(:account_in_the_different_company) { create(:user, group: group_in_different_company) }
+  let!(:user) { create(:user) }
 
   describe 'user' do
     let!(:query_string) {
@@ -16,13 +9,8 @@ describe Types::QueryType do
         query($id: ID!) {
           user(id: $id) {
             id
-            name
-            price
-            items {
-              id
-              name
-              point
-            }
+            email
+            point
           }
         }
       GRAPHQL
@@ -33,8 +21,8 @@ describe Types::QueryType do
         result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: user.id })
         expect(result.dig('data', 'user')).to eq(
           'id' => user.id.to_s,
-          'name' => user.name,
-          'price' => user.price
+          'email' => user.email,
+          'point' => user.point
         )
       end
     end
