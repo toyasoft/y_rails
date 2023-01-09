@@ -19,8 +19,6 @@ describe Mutations::DeleteItem do
   }
 
   context '通常時' do
-    
-
     it '商品IDを返す' do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: item.id })
       item.reload
@@ -63,6 +61,11 @@ describe Mutations::DeleteItem do
 
       expect(result.dig('data', 'createItem', 'deletedItemId')).to be_blank
       expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item"
+    end
+  end
+  context '商品が存在しない場合' do
+    it 'エラーを返す' do
+
     end
   end
 

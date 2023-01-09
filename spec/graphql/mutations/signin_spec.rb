@@ -33,6 +33,9 @@ describe Mutations::Signin do
         'email' => user.email,
       )
     end
+    it 'ユーザートークンを返す' do
+
+    end
   end
   context 'ユーザーが存在しない場合' do
     it 'エラーを返す' do

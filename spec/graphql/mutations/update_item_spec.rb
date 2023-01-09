@@ -134,7 +134,7 @@ describe Mutations::UpdateItem do
       expect(result.dig('errors', 0, 'message')).to include "Validation failed: Name is too long"
     end
   end
-  context 'ポイントか空の場合' do
+  context 'ポイントが空の場合' do
     it 'エラーを返す' do
       object = {
         id: item.id,

@@ -51,6 +51,12 @@ describe Mutations::CreateOrder do
         seller: item.user.email
       )
     end
+    it '購入者のポイントが商品代分減っている事' do
+
+    end
+    it '販売者のポイントが商品代分増えている事' do
+      
+    end
   end
   context '未ログインの場合' do
     it 'エラーを返す' do
@@ -107,6 +113,15 @@ describe Mutations::CreateOrder do
       expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item with"
     end
   end
+  context '購入者と出品者が同じ場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context '購入者のポイントが不足している場合' do
+    it 'エラーを返す' do
 
+    end
+  end
 
 end

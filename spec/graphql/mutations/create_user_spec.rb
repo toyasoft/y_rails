@@ -45,19 +45,7 @@ describe Mutations::CreateUser do
       expect(result.dig('errors', 0, 'message')).to eq('Variable $email of type String! was provided invalid value')
     end
   end
-  context 'パスワードが空の場合' do
-    it 'エラーを返す' do
-      object = {
-        email: "test@toyasoft.com",
-        password: nil
-      }
-
-      result = WorkspaceSchema.execute(query_string, variables: object )
-      expect(result.dig('data', 'createUser', 'user')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to eq('Variable $password of type String! was provided invalid value')
-    end
-  end
-  context 'メールアドレスが正しくない場合' do
+  context 'メールアドレスのフォーマットが正しくない場合' do
     it 'エラーを返す' do
       object = {
         email: "example",
@@ -93,6 +81,33 @@ describe Mutations::CreateUser do
       result = WorkspaceSchema.execute(query_string, variables: object )
       expect(result.dig('data', 'createUser', 'user')).to be_blank
       expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Email has already been taken')
+    end
+  end
+  context 'パスワードが空の場合' do
+    it 'エラーを返す' do
+      object = {
+        email: "test@toyasoft.com",
+        password: nil
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Variable $password of type String! was provided invalid value')
+    end
+  end
+  context 'パスワードが7文字以下の場合' do
+    it 'エラーを返す' do
+
+    end
+  end
+  context 'パスワードが21文字以上の場合' do
+    it 'エラーを返す' do
+      
+    end
+  end
+  context 'パスワードが必要文字を含まない場合' do
+    it 'エラーを返す' do
+      
     end
   end
 
