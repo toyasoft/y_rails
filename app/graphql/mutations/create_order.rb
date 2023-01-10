@@ -36,8 +36,8 @@ module Mutations
         buyer: buyer,
         seller: seller
       }
-    # rescue => e
-    #   raise GraphQL::ExecutionError, e
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
   end
 end

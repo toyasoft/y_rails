@@ -5,12 +5,27 @@ services:
     image: mysql:8.0.28
     ports:
       - "3306:3306"
+    expose:
+      - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: "Asia/Tokyo"
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - mysqldb:/var/lib/mysql
+    networks:
+      - y-node-network
+  mysql-test:
+    image: mysql:8.0.28
+    ports:
+      - "3307:3306"
+    expose:
+      - "3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
       - y-node-network
   api:
