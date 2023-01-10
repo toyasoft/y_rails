@@ -8,7 +8,7 @@ module Mutations
     def resolve(**args)
       raise GraphQL::ExecutionError, "認証エラーです" if context[:current_user].nil?
       item = Item.where(del: false).find(args[:id])
-      item.update!(del: true)
+      item.update_attribute(:del, true)
 
       return {
         deleted_item_id: args[:id],
