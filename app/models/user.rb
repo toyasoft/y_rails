@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :items, -> { where(del: false) }, dependent: :nullify
   
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i }, length: { maximum: 255 }
-  validates :password, presence: true, length: { in: 8..20 }, format: { with: /(?=.*\d+.*)(?=.*[a-zA-Z]+.*).*[!@#%_,&~\\\^\?\|\/\*\.\-\+\$\(\)]+.*/ }
+  validates :password, presence: true, length: { in: 8..20 }, format: { with: /(?=.*\d+.*)(?=.*[a-zA-Z]+.*).*/ }
   before_save :downcase_email
 
   def User.digest(string)

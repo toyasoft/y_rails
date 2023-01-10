@@ -34,7 +34,12 @@ describe Mutations::Signin do
       )
     end
     it 'ユーザートークンを返す' do
-
+      object = {
+        email: user.email,
+        password: user.password
+      }
+      result = WorkspaceSchema.execute(query_string, variables: object)
+      expect(result.dig('data', 'signin', 'userToken')).not_to be_blank
     end
   end
   context 'ユーザーが存在しない場合' do

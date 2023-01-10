@@ -71,7 +71,7 @@ describe Mutations::CreateItem do
 
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: object )
       expect(result.dig('data', 'createItem', 'item')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Validation failed: Name is too long"
+      expect(result.dig('errors', 0, 'message')).to eq "Validation failed: Name is too long (maximum is 255 characters)"
     end
   end
   context 'ポイントが空の場合' do

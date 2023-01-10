@@ -79,7 +79,7 @@ describe Mutations::UpdateItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: object)
 
       expect(result.dig('data', 'updateItem', 'item')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item"
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=example [WHERE `items`.`del` = ?]"
     end
   end
   context '商品が存在しない場合' do
@@ -92,7 +92,7 @@ describe Mutations::UpdateItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: object)
 
       expect(result.dig('data', 'updateItem', 'item')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item"
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=9999 [WHERE `items`.`del` = ?]"
     end
   end
   context '商品が削除済みの場合' do
@@ -105,7 +105,7 @@ describe Mutations::UpdateItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: object)
 
       expect(result.dig('data', 'updateItem', 'item')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item"
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=#{object[:id]} [WHERE `items`.`del` = ?]"
     end
   end
   context '商品名が空の場合' do
@@ -131,7 +131,7 @@ describe Mutations::UpdateItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: object)
 
       expect(result.dig('data', 'updateItem', 'item')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Validation failed: Name is too long"
+      expect(result.dig('errors', 0, 'message')).to eq "Validation failed: Name is too long (maximum is 255 characters)"
     end
   end
   context 'ポイントが空の場合' do

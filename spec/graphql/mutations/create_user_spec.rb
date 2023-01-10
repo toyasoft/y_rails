@@ -22,7 +22,7 @@ describe Mutations::CreateUser do
     it 'ユーザーオブジェクトを返す' do
       object = {
         email: "test@toyasoft.com",
-        password: "1234asdfqWer!"
+        password: "1234asdfqWer"
       }
 
       result = WorkspaceSchema.execute(query_string, variables: object )
@@ -37,7 +37,7 @@ describe Mutations::CreateUser do
     it 'エラーを返す' do
       object = {
         email: nil,
-        password: "1234asdfqWer!"
+        password: "1234asdfqWer"
       }
 
       result = WorkspaceSchema.execute(query_string, variables: object )
@@ -49,7 +49,7 @@ describe Mutations::CreateUser do
     it 'エラーを返す' do
       object = {
         email: "example",
-        password: "1234asdfqWer!"
+        password: "1234asdfqWer"
       }
 
       result = WorkspaceSchema.execute(query_string, variables: object )
@@ -61,7 +61,7 @@ describe Mutations::CreateUser do
     it 'エラーを返す' do
       object = {
         email: "test@" + "a" * 256 + ".com",
-        password: "1234asdfqWer!"
+        password: "1234asdfqWer"
       }
 
       result = WorkspaceSchema.execute(query_string, variables: object )
@@ -75,7 +75,7 @@ describe Mutations::CreateUser do
       
       object = {
         email: "test@toyasoft.com",
-        password: "1234asdfqWer!"
+        password: "1234asdfqWer"
       }
 
       result = WorkspaceSchema.execute(query_string, variables: object )
@@ -97,17 +97,38 @@ describe Mutations::CreateUser do
   end
   context 'パスワードが7文字以下の場合' do
     it 'エラーを返す' do
+      object = {
+        email: "test@toyasoft.com",
+        password: "1asr"
+      }
 
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Password is too short (minimum is 8 characters)')
     end
   end
   context 'パスワードが21文字以上の場合' do
     it 'エラーを返す' do
-      
+      object = {
+        email: "test@toyasoft.com",
+        password: "11111111111111111111asr"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Password is too long (maximum is 20 characters)')
     end
   end
   context 'パスワードが必要文字を含まない場合' do
     it 'エラーを返す' do
-      
+      object = {
+        email: "test@toyasoft.com",
+        password: "abcdefghijk"
+      }
+
+      result = WorkspaceSchema.execute(query_string, variables: object )
+      expect(result.dig('data', 'createUser', 'user')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq('Validation failed: Password is invalid')
     end
   end
 

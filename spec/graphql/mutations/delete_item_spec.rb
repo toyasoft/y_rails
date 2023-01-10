@@ -32,7 +32,7 @@ describe Mutations::DeleteItem do
     it 'エラーを返す' do
       result = WorkspaceSchema.execute(query_string, variables: { id: item.id })
 
-      expect(result.dig('data', 'createItem', 'deletedItemId')).to be_blank
+      expect(result.dig('data', 'deleteItem', 'deletedItemId')).to be_blank
       expect(result.dig('errors', 0, 'message')).to eq "認証エラーです"
     end
   end
@@ -41,7 +41,7 @@ describe Mutations::DeleteItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: nil })
       item.reload
 
-      expect(result.dig('data', 'createItem', 'deletedItemId')).to be_blank
+      expect(result.dig('data', 'deleteItem', 'deletedItemId')).to be_blank
       expect(result.dig('errors', 0, 'message')).to eq "Variable $id of type ID! was provided invalid value"
     end
   end
@@ -50,22 +50,24 @@ describe Mutations::DeleteItem do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: "example" })
       item.reload
 
-      expect(result.dig('data', 'createItem', 'deletedItemId')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item with"
+      expect(result.dig('data', 'deleteItem', 'deletedItemId')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=example [WHERE `items`.`del` = ?]"
     end
   end
   context '商品が削除済みの場合' do
     it 'エラーを返す' do
       result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: deleted_item.id })
-      item.reload
 
-      expect(result.dig('data', 'createItem', 'deletedItemId')).to be_blank
-      expect(result.dig('errors', 0, 'message')).to include "Couldn't find Item"
+      expect(result.dig('data', 'deleteItem', 'deletedItemId')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=#{deleted_item.id} [WHERE `items`.`del` = ?]"
     end
   end
   context '商品が存在しない場合' do
     it 'エラーを返す' do
-
+      result = WorkspaceSchema.execute(query_string, context: { current_user: user }, variables: { id: 9999})
+      expect(result.dig('data', 'deleteItem', 'deletedItemId')).to be_blank
+      expect(result.dig('errors', 0, 'message')).to eq "Couldn't find Item with 'id'=9999 [WHERE `items`.`del` = ?]"
+      
     end
   end
 
