@@ -1,24 +1,11 @@
-# README
+# テスト用Ruby on Rails & GraphQL API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby on RailsとGrapqhQLで構築したAPIテスト。
+データベースはMysqlを使用。
+テストコードはRspecを使用。
 
-Things you may want to cover:
+VSCodeのdev containerを使用して構築しているので、VSCodeにてDockerを立ち上げ下記のコマンドで起動可能
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+rails s -p 3000 -b　"0.0.0.0"
+```
