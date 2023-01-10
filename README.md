@@ -1,7 +1,7 @@
-# テスト用Ruby on Rails & GraphQL API
+# Ruby on Rails & GraphQL API
 
-Ruby on RailsとGrapqhQLで構築したAPIテスト。  
-データベースはMysqlを使用。  
+Ruby on Rails6とGrapqhQLで構築したAPI。  
+データベースはMysql8を使用。  
 テストコードはRspecを使用。  
 
 VSCodeのdev containerを使用して構築しているので、VSCodeにてDockerを立ち上げ下記のコマンドで起動可能
