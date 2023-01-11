@@ -26,6 +26,7 @@ services:
       TZ: "Asia/Tokyo"
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysqltestdb:/var/lib/mysql
     networks:
       - y-node-network
   api:
@@ -47,10 +48,12 @@ services:
       - y-node-network
     depends_on:
       - mysql
+      - mysql-test
     stdin_open: true
     tty: true
 volumes:
   mysqldb:
+  mysqltestdb:
 networks:
   y-node-network:
     external: true
