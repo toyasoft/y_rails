@@ -7,6 +7,8 @@ module Types
     field :items, [Types::ItemType], null: false
     def items
       Item.where(del: 0)
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
 
     field :item, Types::ItemType, null: false do
@@ -23,6 +25,8 @@ module Types
     def current_user
       raise GraphQL::ExecutionError, "認証エラーです" unless context[:current_user]
       context[:current_user]
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
 
     field :user, Types::UserType, null: false do
@@ -30,11 +34,15 @@ module Types
     end
     def user(id:)
       User.find(id)
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
 
     field :orders, [Types::OrderType], null: false
     def orders
       Order.all
+    rescue => e
+      raise GraphQL::ExecutionError, e
     end
   end
 end
