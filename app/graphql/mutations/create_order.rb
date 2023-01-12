@@ -14,23 +14,24 @@ module Mutations
       raise GraphQL::ExecutionError, "自己出品の商品は購入できません" if item.user_id === context[:current_user].id
       raise GraphQL::ExecutionError, "ポイントが不足しています" if item.point > context[:current_user].point
 
-      
-      order = Order.create!(
-        user_id: context[:current_user].id,
-        item_id: item.id,
-        point: item.point,
-        buyer: context[:current_user].email,
-        seller: item.user.email,
-        name: item.name
-      )
-      buyer = User.find(context[:current_user].id)
-      buyer.update_attribute(
-        :point, buyer.point - item.point
-      )
-      seller = User.find(item.user.id)
-      seller.update_attribute(
-        :point, seller.point + item.point
-      )
+      ActiveRecord::Base.transaction do      
+        order = Order.create!(
+          user_id: context[:current_user].id,
+          item_id: item.id,
+          point: item.point,
+          buyer: context[:current_user].email,
+          seller: item.user.email,
+          name: item.name
+        )
+        buyer = User.find(context[:current_user].id)
+        buyer.update_attribute(
+          :point, buyer.point - item.point
+        )
+        seller = User.find(item.user.id)
+        seller.update_attribute(
+          :point, seller.point + item.point
+        )
+      end
       {
         order: order,
         buyer: buyer,
